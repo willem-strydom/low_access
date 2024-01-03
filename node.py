@@ -15,6 +15,8 @@ class node:
         # return data@w.T based on decoding protocol... idek what that is
         low_acc_w = self.decoder[tuple(w)] # python dict need imutable keys i just learned
         return self.coded_data @ low_acc_w.T
+
+# test is query is working alright
 """data = np.random.rand(2,2)
 print(data)
 G = np.array([[1,0,1], #parity code... satisfies the closed under compliment bit I think

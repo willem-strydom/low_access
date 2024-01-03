@@ -16,8 +16,6 @@ def master(m: int, data: np.ndarray, decoder: dict, G: np.ndarray):
     for i in range(m):
         # use most intuitive partition scheme
         nodes_array.append(node(data[:, width*i:width*(1+i)], decoder, G))
-        print(width*i,width*(1+i))
-        print(data[:, width*i:width*(1+i)])
 
     return nodes_array #not sure if this is like a one and done deal
 
