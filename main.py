@@ -20,8 +20,6 @@ def main():
     ans = query(w,nodes_array,4) # Just tell it how many examples there are
     print(ans)
     print(np.dot(data,w))
-    print(data[:, 0:2])
-    print(data[:, 2:4])
 
     return 0
 main()

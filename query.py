@@ -10,5 +10,5 @@ def query(w, nodes_array,n):
     # partition w and do a query
     ans_array = np.zeros((n,m))
     for i in range(m):
-        ans_array[:,i] = nodes_array[i].query(w[i:width+i])
+        ans_array[:,i] = nodes_array[i].query(w[width*i:width*(i+1)])
     return np.sum(ans_array, axis = 1) # add the responses together, i think sum them as columns is axis = 1 ...
