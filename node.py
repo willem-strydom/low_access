@@ -9,10 +9,24 @@ class node:
         """
         self.G = G
         self.decoder = decoder
-        self.data = np.dot(data,G)
+        self.coded_data = np.dot(data,G)
 
     def query(self, w:np.ndarray):
-        # return w.T@data based on decoding protocol... idek what that is
-        low_acc_w = self.decoder[w] #how this would actually work idek
-        return np.dot(low_acc_w, self.data)
-
+        # return data@w.T based on decoding protocol... idek what that is
+        low_acc_w = self.decoder[tuple(w)] # python dict need imutable keys i just learned
+        return self.coded_data @ low_acc_w.T
+"""data = np.random.rand(2,2)
+print(data)
+G = np.array([[1,0,1], #parity code... satisfies the closed under compliment bit I think
+              [0,1,1]
+              ])
+decoder = {
+    (-1,-1): np.array([0,0,-1]),
+    (-1,1):np.array([-1,1,0]),
+    (1,-1):np.array([1,-1,0]),
+    (1,1):np.array([0,0,1])
+}# Best guess as to what the lookup table should look like...
+node = node(data,decoder,G)
+w = np.array([1,-1])
+print(node.query(w))
+print(data @ w.T)"""
