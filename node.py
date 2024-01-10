@@ -10,13 +10,30 @@ class node:
         self.G = G
         self.decoder = decoder
         self.coded_data = np.dot(data,G)
+        #make parity check for use in syndrome decoding
+        k, n = G.shape
+
+        # Extract the P matrix from G (assuming G is in the standard form [I | P])
+        P = G[:, k:n]
+
+        # Construct H = [-P^T | I_(n-k)]
+        self.H = np.concatenate((P.T, np.identity(n - k)), axis=1).astype(int)
 
     def query(self, w:np.ndarray):
-        # return data@w.T based on decoding protocol... idek what that is
-        low_acc_w = self.decoder # python dict need imutable keys i just learned
-        print(self.coded_data)
+        # return data@w.T based on decoding protocol...
+        low_acc_w = self.decoder[tuple(w)] #python dict need immutable keys I just learned
+        access = len(low_acc_w) - np.sum(np.where(low_acc_w==0,1,0))
+        print(access) #as requested i thing
         return self.coded_data @ low_acc_w.T
-
+# test for making parity check matrix
+"""data = np.random.rand(2,2)
+decoder = {}
+G = np.array([
+    [1,0,1],
+    [0,1,1]
+])
+test_node = node(data,decoder,G)
+print(test_node.H)"""
 # test is query is working alright
 '''data = np.random.rand(2,2)
 print(data)
