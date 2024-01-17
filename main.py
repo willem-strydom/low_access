@@ -9,9 +9,9 @@ from decoder import decoder
 # maybe write general program to make lookup table for single parity
 # try over actual data
 # measure access
-# use actual hamming code... my bad
-#measure access as a long term average
-#try case where encoding is just I but still distributed
+# use actual "hamming" code... my bad
+# measure access as a long term average
+# try case where encoding is just I but still distributed
 def main():
     data = np.genfromtxt("framingham_cleaned_file.csv", dtype=float, comments='#', delimiter=",", skip_header=1)
     a = np.eye(3)
