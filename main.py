@@ -9,6 +9,9 @@ from decoder import decoder
 # maybe write general program to make lookup table for single parity
 # try over actual data
 # measure access
+# use actual hamming code... my bad
+#measure access as a long term average
+#try case where encoding is just I but still distributed
 def main():
     data = np.genfromtxt("framingham_cleaned_file.csv", dtype=float, comments='#', delimiter=",", skip_header=1)
     a = np.eye(3)
@@ -18,31 +21,55 @@ def main():
     decoder = decoder(3)
     data = np.hstack((data,np.zeros((data.shape[0],2)))) # need m|data.shape[1] = num cols
     m = 6
-    w = np.random.choice([-1, 1], data.shape[1])
-    nodes_array = master(m, data, decoder, G, w)
-    print(np.dot(data, w))
+    nodes_array = master(m, data, decoder, G)
     return 0
-main()
 
+#for real this time
 def hamming():
+    from hamming_decoder import hamming_decoder
     data = np.genfromtxt("framingham_cleaned_file.csv", dtype=float, comments='#', delimiter=",", skip_header=1)
-    G = G_matrix(3)
-    from decoder import decoder
-    decoder = {
-        (1, 1, 1): np.array([0, 0, 0, 0, 0, 0, 1]),
-        (1, 1, -1): np.array([0, 0, -2, 0, 0, 0, 1]),
-        (1, -1, 1): np.array([0, -2, 0, 0, 0, 0, 1]),
-        (-1, 1, 1): np.array([-2, 0, 0, 0, 0, 0, 1]),
-        (1, -1, -1): np.array([2, 0, 0, 0, 0, 0, -1]),
-        (-1, 1, -1): np.array([0, 2, 0, 0, 0, 0, -1]),
-        (-1, -1, 1): np.array([0, 0, 2, 0, 0, 0, -1]),
-        (-1,-1,-1):np.array([0, 0, 0, 0, 0, 0, -1])
-    } # not yet automated
-    data = np.hstack((data, np.zeros((data.shape[0], 2))))  # need m|data.shape[1] = num cols
-    m = 6
-    w = np.random.choice([-1, 1], data.shape[1])
-    nodes_array = master(m, data, decoder, G, w)
-    print(np.dot(data, w))
+    I = np.eye(7)
+    """I = np.where(I == 1, -1, I)
+    I = np.where(I == 0, 1, I)""" # pretty sure this makes no sense but should clarify
+    B = np.array([
+        [1,1,1,1,1,1,1],
+        [-1,-1,-1,1,1,1,1],
+        [-1,1,1,-1,-1,1,1],
+        [1,-1,-1,-1,-1,1,1],
+        [1,-1,1,-1,1,-1,1],
+        [-1,1,-1,1,-1,1,-1],
+        [-1,-1,1,1,-1,-1,1],
+        [1,1,-1,1,-1,-1,1]
+    ]).T
+    G = np.hstack((I,B))
+
+    data = np.hstack((data, np.zeros((data.shape[0], 5))))  # need m*g.sys.shape = data.shape[1] = num cols
+    m = 3
+
+    decoder = hamming_decoder(B.T)
+    nodes_array = master(m, data, decoder, G)
 
     return 0
+
+
+def identity():
+    """
+    test for trivial encoding scheme w/ same params as for hamming code i think
+    """
+    data = np.genfromtxt("framingham_cleaned_file.csv", dtype=float, comments='#', delimiter=",", skip_header=1)
+    G = np.eye(7)
+    decoder = {}
+    n = 7
+    all_combinations = np.array(np.meshgrid(*[[-1, 1]] * n)).T.reshape(-1, n)  # vectors in rows
+    for v in all_combinations:
+        decoder[tuple(v)] = v
+    data = np.hstack((data, np.zeros((data.shape[0], 5))))
+    m = 3
+    nodes_array = master(m, data, decoder, G)
+
 hamming()
+main()
+identity()
+
+
+# the decoding of addititional columns is silly... lookup table is for +-1, cannot accomadate 0 cols
