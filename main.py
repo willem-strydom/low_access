@@ -5,13 +5,9 @@ from query import query
 from G_matrix import G_matrix
 from decoder import decoder
 
-# use hamming code for G
-# maybe write general program to make lookup table for single parity
-# try over actual data
-# measure access
-# use actual "hamming" code... my bad
-# measure access as a long term average
-# try case where encoding is just I but still distributed
+# writing access in proper way
+# data with more features
+# sstart thinking about combining both parts
 def main():
     data = np.genfromtxt("framingham_cleaned_file.csv", dtype=float, comments='#', delimiter=",", skip_header=1)
     a = np.eye(3)
@@ -37,7 +33,7 @@ def hamming():
         [-1,1,1,-1,-1,1,1],
         [1,-1,-1,-1,-1,1,1],
         [1,-1,1,-1,1,-1,1],
-        [-1,1,-1,1,-1,1,-1],
+        [-1,1,-1,-1,1,-1,1],
         [-1,-1,1,1,-1,-1,1],
         [1,1,-1,1,-1,-1,1]
     ]).T
@@ -68,8 +64,7 @@ def identity():
     nodes_array = master(m, data, decoder, G)
 
 hamming()
-main()
-identity()
+
 
 
 # the decoding of addititional columns is silly... lookup table is for +-1, cannot accomadate 0 cols

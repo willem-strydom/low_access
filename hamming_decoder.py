@@ -33,22 +33,16 @@ def hamming_decoder(G):
         code[best_ind] = sign
         lookup_table[tuple(v)] = np.hstack((correction,code))
     return lookup_table
-"""
+
 G = np.array([
         [1,1,1,1,1,1,1],
         [-1,-1,-1,1,1,1,1],
         [-1,1,1,-1,-1,1,1],
         [1,-1,-1,-1,-1,1,1],
         [1,-1,1,-1,1,-1,1],
-        [-1,1,-1,1,-1,1,-1],
+        [-1,1,-1,-1,1,-1,1],
         [-1,-1,1,1,-1,-1,1],
         [1,1,-1,1,-1,-1,1]
     ])
 table = hamming_decoder(G)
 # just realized I need to check the case where the closest vector is in the compliment
-print(table[(1,1,1,1,1,1,1)])
-print(table[(-1,-1,-1,1,1,1,1)])
-print(len(table[(-1,1,1,-1,1,1,1)]))
-print(table[(-1,-1,-1,-1,-1,-1,-1)])"""
-
-
