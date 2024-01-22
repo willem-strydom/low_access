@@ -1,12 +1,6 @@
-#main
 import numpy as np
 from master import master
-from query import query
-from decoder import decoder
-
-# writing access in proper way
-# data with more features
-# start thinking about combining both parts
+from general_decoder import general_decoder
 def main():
     data = np.genfromtxt("framingham_cleaned_file.csv", dtype=float, comments='#', delimiter=",", skip_header=1)
     a = np.eye(3)
@@ -61,9 +55,4 @@ def identity():
     data = np.hstack((data, np.zeros((data.shape[0], 5))))
     m = 3
     nodes_array = master(m, data, decoder, G)
-
-hamming()
-
-
-
-# the decoding of addititional columns is silly... lookup table is for +-1, cannot accomadate 0 cols
+    return 0

@@ -6,7 +6,7 @@ def query(w, nodes_array,n):
     :return: np.dot(w,data) but like with low access
     """
     m = len(nodes_array)
-    width = nodes_array[0].G.shape[0] # size of raw data at each node is needed to partition w. assume systematic G
+    width = nodes_array[0].G.shape[0] # size of raw data at each node is needed to partition w. assume systematic B
     # partition w and do a query
     ans_array = np.zeros((n,m))
     access = np.zeros(m)
